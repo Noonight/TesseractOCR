@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Tesseract-OCR</string>
+    <string name="startCam">start camera</string>
+</resources>
