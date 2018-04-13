@@ -2,6 +2,7 @@ package com.example.ayur.tesseract_ocr.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.example.ayur.tesseract_ocr.common.Constants;
 
@@ -16,6 +17,7 @@ public class TmpPhotoFileHelper {
     private File file;
     private Context context;
     private FileOutputStream outStream;
+    private BitmapFactory bitmapFactory;
 
     public TmpPhotoFileHelper(Context context) {
         this.context = context;
@@ -34,7 +36,8 @@ public class TmpPhotoFileHelper {
 
     public void writeToFile(Bitmap bitmap) {
         try {
-            outStream = new FileOutputStream(createTmpFile());
+            file = createTmpFile();
+            outStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -47,19 +50,15 @@ public class TmpPhotoFileHelper {
         }
     }
 
-    public Bitmap readFromFile() {
-        Bitmap bitmap = null;
-        try {
-            FileReader reader = new FileReader(file);
-            try {
-                int bit = reader.read();
+    public File getFile() {
+        return file;
+    }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public Bitmap readFromFile() {
+        Bitmap bitmap;
+
+        bitmap = BitmapFactory.decodeFile(file.getPath());
+
         return bitmap;
     }
 

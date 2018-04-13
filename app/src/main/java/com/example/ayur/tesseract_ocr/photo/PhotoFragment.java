@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.ayur.tesseract_ocr.App;
 import com.example.ayur.tesseract_ocr.R;
 import com.example.ayur.tesseract_ocr.utils.TmpPhotoFileHelper;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
@@ -38,16 +39,20 @@ public class PhotoFragment extends MvpFragment<PhotoView, PhotoPresenter> implem
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ButterKnife.bind(getActivity());
-        return inflater.inflate(R.layout.fragment_photo, container, false);
+        View view = inflater.inflate(R.layout.fragment_photo, container, false);
+        ButterKnife.bind(this, view);
+        //btnStartCam.setOnClickListener(view -> startCamera());
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnStartCam.setOnClickListener(v -> {
-            startCamera();
-        });
+        initView();
+    }
+
+    private void initView() {
+        btnStartCam.setOnClickListener(view -> startCamera());
     }
 
     @Override
@@ -75,6 +80,6 @@ public class PhotoFragment extends MvpFragment<PhotoView, PhotoPresenter> implem
         super.onActivityResult(requestCode, resultCode, data);
         photo = (Bitmap) data.getExtras().get("data");
         ivPhoto.setImageBitmap(photo);
-        new TmpPhotoFileHelper(getContext()).writeToFile(photo);
+        App.getInstance().getPhotoFileHelper().writeToFile(photo);
     }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Tesseract-OCR</string>
-    <string name="startCam">start camera</string>
+    <string name="startCam">Start camera</string>
+    <string name="image_not_found">Image not found</string>
+    <string name="create_photo">Create photo</string>
+    <string name="translated_photo">Translated photo</string>
 </resources>
