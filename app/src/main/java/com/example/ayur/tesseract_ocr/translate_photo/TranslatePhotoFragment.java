@@ -1,11 +1,10 @@
 package com.example.ayur.tesseract_ocr.translate_photo;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ayur.tesseract_ocr.App;
-import com.example.ayur.tesseract_ocr.MainActivity;
 import com.example.ayur.tesseract_ocr.R;
-import com.example.ayur.tesseract_ocr.utils.TmpPhotoFileHelper;
-import com.example.ayur.tesseract_ocr.utils.Utils;
+import com.example.ayur.tesseract_ocr.common.Log;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import butterknife.BindView;
@@ -31,22 +28,21 @@ public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, Tran
     FrameLayout fDataLayerFrame;
     @BindView(R.id.tv_translated_photo)
     TextView tvTranslatedPhoto;
-
-    private TmpPhotoFileHelper photoFileHelper;
+    @BindView(R.id.srl_try_translate)
+    SwipeRefreshLayout srlTryTranslate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        photoFileHelper = new TmpPhotoFileHelper(getActivity());
     }
 
     private void checkPhoto() {
-        if (App.getInstance().getPhotoFileHelper().readFromFile() == null) {
+        if (App.getPhotoFileHelper().readFromFile() == null) {
             hideDataLayer();
         } else {
             showDataLayer();
-            getPresenter().convertPhotoToText(photoFileHelper.readFromFile());
+            getPresenter().convertPhotoToText(App.getPhotoFileHelper().readFromFile());
         }
     }
 
@@ -62,6 +58,28 @@ public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, Tran
         View view = inflater.inflate(R.layout.fragment_translate_photo, container, false);
         ButterKnife.bind(this, view);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews();
+    }
+
+    private void initViews() {
+        //srlTryTranslate.setRefreshing(true);
+
+        SwipeRefreshLayoutListener refreshLayoutListener = new SwipeRefreshLayoutListener(new SwipeRefreshLayoutListener.SwipeRefreshCallback() {
+            @Override
+            public void refreshCallback() {
+                srlTryTranslate.setRefreshing(false);
+                checkPhoto();
+                Log.d("refresh Callback");
+            }
+        });
+
+        srlTryTranslate.setOnRefreshListener(refreshLayoutListener);
+        srlTryTranslate.setColorSchemeColors(Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE);
     }
 
     @Override
@@ -85,7 +103,6 @@ public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, Tran
         fDataLayerFrame.setVisibility(View.INVISIBLE);
         fNoDataLayerFrame.setVisibility(View.VISIBLE);
     }
-
 
     @Override
     public void showError() {

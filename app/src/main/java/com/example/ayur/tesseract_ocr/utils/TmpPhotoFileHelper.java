@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.example.ayur.tesseract_ocr.App;
 import com.example.ayur.tesseract_ocr.common.Constants;
+import com.example.ayur.tesseract_ocr.common.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class TmpPhotoFileHelper {
@@ -17,7 +18,6 @@ public class TmpPhotoFileHelper {
     private File file;
     private Context context;
     private FileOutputStream outStream;
-    private BitmapFactory bitmapFactory;
 
     public TmpPhotoFileHelper(Context context) {
         this.context = context;
@@ -34,11 +34,18 @@ public class TmpPhotoFileHelper {
         return null;
     }
 
+    public void writeFilePathToSh() {
+        ShHelper shHelper = new ShHelper(context);
+        shHelper.putString(Constants.PHOTO_PATH, file.getPath());
+        Log.d(shHelper.getString(Constants.PHOTO_PATH));
+    }
+
     public void writeToFile(Bitmap bitmap) {
         try {
             file = createTmpFile();
             outStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            writeFilePathToSh();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -55,11 +62,7 @@ public class TmpPhotoFileHelper {
     }
 
     public Bitmap readFromFile() {
-        Bitmap bitmap;
-
-        bitmap = BitmapFactory.decodeFile(file.getPath());
-
-        return bitmap;
+        return BitmapFactory.decodeFile(App.getShHelper().getString(Constants.PHOTO_PATH));
     }
 
 

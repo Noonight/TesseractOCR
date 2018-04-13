@@ -4,38 +4,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/not_data_layer_fragment_tranlsate_photo"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_try_translate"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/image_not_found"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-    </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/data_layer_fragment_translate_photo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/not_data_layer_fragment_tranlsate_photo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_translated_photo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/image_not_found"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
-        </LinearLayout>
-    </FrameLayout>
+
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/data_layer_fragment_translate_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_translated_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:textSize="18sp" />
+
+            </FrameLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.ayur.tesseract_ocr.App;
 import com.example.ayur.tesseract_ocr.R;
-import com.example.ayur.tesseract_ocr.utils.TmpPhotoFileHelper;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 
 import butterknife.BindView;
@@ -78,8 +77,10 @@ public class PhotoFragment extends MvpFragment<PhotoView, PhotoPresenter> implem
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        photo = (Bitmap) data.getExtras().get("data");
-        ivPhoto.setImageBitmap(photo);
-        App.getInstance().getPhotoFileHelper().writeToFile(photo);
+        if (data.getExtras().get("data") != null) {
+            photo = (Bitmap) data.getExtras().get("data");
+            ivPhoto.setImageBitmap(photo);
+            App.getPhotoFileHelper().writeToFile(photo);
+        }
     }
 }
