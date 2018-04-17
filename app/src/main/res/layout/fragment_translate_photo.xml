@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
 
-        <FrameLayout
+        <!--<FrameLayout
             android:id="@+id/not_data_layer_fragment_tranlsate_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -26,25 +26,32 @@
 
         </FrameLayout>
 
-        <ScrollView
+        &lt;!&ndash;<ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent">&ndash;&gt;
 
             <FrameLayout
                 android:id="@+id/data_layer_fragment_translate_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                &lt;!&ndash;<TextView
                     android:id="@+id/tv_translated_photo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:textSize="18sp" />
+                    android:textSize="18sp" />&ndash;&gt;
 
-            </FrameLayout>
+            </FrameLayout>-->
 
-        </ScrollView>
+        <!--</ScrollView>-->
+
+        <TextView
+            android:id="@+id/tv_translated_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:textSize="18sp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -1,18 +1,15 @@
 package com.example.ayur.tesseract_ocr;
 
-import android.content.res.AssetManager;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.ayur.tesseract_ocr.common.Constants;
-import com.example.ayur.tesseract_ocr.common.Log;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
+import com.example.ayur.tesseract_ocr.tools.RequestPermissionsToolImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     @BindView(R.id.tab_main)
     TabLayout tabLayout;
+
+    private RequestPermissionsToolImpl requestTool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,36 +36,34 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        Log.d(Constants.DATA_PATH);
-
-        AssetManager myAssetManager = getApplicationContext().getAssets();
-
-        try {
-            Log.d(String.valueOf(this.getResources().getAssets().open("tessdata").read()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions();
         }
-
-        getRoots();
-
-        try {
-            String[] Files = myAssetManager.list(""); // массив имен файлов
-            for (String s : Files) {
-                Log.d(s);
-            }
-            Log.d(Arrays.toString(myAssetManager.getLocales()) +"");
-            //Toast.makeText(getApplicationContext(), Files[0] + ", " + Files[1], Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
     }
 
-    private void getRoots() {
-        File file = new File(Environment.getExternalStorageDirectory() + "/tesseract_ocr/");
-        Log.d(file.getPath());
-        Log.d(file.getName());
+    private void requestPermissions() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        requestTool = new RequestPermissionsToolImpl();
+        requestTool.requestPermissions(this, permissions);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        boolean grantedAllPermissions = true;
+        for (int grantResult : grantResults) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                grantedAllPermissions = false;
+            }
+        }
+
+        if (grantResults.length != permissions.length || (!grantedAllPermissions)) {
+
+            requestTool.onPermissionDenied();
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
     }
 
 }

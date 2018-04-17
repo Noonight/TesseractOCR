@@ -1,9 +1,10 @@
 package com.example.ayur.tesseract_ocr.translate_photo;
 
 import android.graphics.Bitmap;
-import android.os.Environment;
 
+import com.example.ayur.tesseract_ocr.App;
 import com.example.ayur.tesseract_ocr.common.Log;
+import com.example.ayur.tesseract_ocr.utils.TesseractHelper;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 
@@ -11,8 +12,25 @@ import java.io.File;
 
 public class TranslatePhotoPresenter extends MvpBasePresenter<TranslatePhotoView> {
 
-    public void convertPhotoToText(Bitmap photo) {
-        getView().setTranslatedText(tesseractExtractText(photo));
+    private TesseractHelper tesseractHelper;
+
+    public TranslatePhotoPresenter() {
+
+    }
+
+    public void convertPhotoToText(Bitmap bitmap) {
+        //getView().setTranslatedText(tesseractExtractText(photo));
+
+        String result;
+
+        if (tesseractHelper != null) {
+            result = tesseractHelper.doOCR(bitmap);
+        } else {
+            tesseractHelper = new TesseractHelper(App.getInstance(), TesseractHelper.RU);
+            result = tesseractHelper.doOCR(bitmap);
+        }
+        getView().setTranslatedText(result);
+
         //Utils.tesseractExtractText(photo);
     }
 
@@ -20,7 +38,7 @@ public class TranslatePhotoPresenter extends MvpBasePresenter<TranslatePhotoView
         TessBaseAPI tessBaseAPI = new TessBaseAPI();
         //tessBaseAPI.init(Constants.DATA_PATH, "eng");
 
-        String datapath = Environment.getExternalStorageDirectory() + "/TesseractOCR/";
+        String datapath = "file:///android_asset/tesseract_ocr/";
         String language = "eng";
         File dir = new File(datapath + "tessdata/");
         if (!dir.exists())

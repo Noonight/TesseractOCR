@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +21,10 @@ import butterknife.ButterKnife;
 
 public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, TranslatePhotoPresenter> implements TranslatePhotoView {
 
-    @BindView(R.id.not_data_layer_fragment_tranlsate_photo)
+    /*@BindView(R.id.not_data_layer_fragment_tranlsate_photo)
     FrameLayout fNoDataLayerFrame;
     @BindView(R.id.data_layer_fragment_translate_photo)
-    FrameLayout fDataLayerFrame;
+    FrameLayout fDataLayerFrame;*/
     @BindView(R.id.tv_translated_photo)
     TextView tvTranslatedPhoto;
     @BindView(R.id.srl_try_translate)
@@ -38,11 +37,15 @@ public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, Tran
     }
 
     private void checkPhoto() {
+        tvTranslatedPhoto.setText("something");
         if (App.getPhotoFileHelper().readFromFile() == null) {
-            hideDataLayer();
+            //hideDataLayer();
+            showDataLayer();
+            Log.d("file not found");
         } else {
             showDataLayer();
             getPresenter().convertPhotoToText(App.getPhotoFileHelper().readFromFile());
+            Log.d("file found");
         }
     }
 
@@ -89,19 +92,21 @@ public class TranslatePhotoFragment extends MvpFragment<TranslatePhotoView, Tran
 
     @Override
     public void setTranslatedText(String text) {
+        Log.d(text);
+        //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
         tvTranslatedPhoto.setText(text);
     }
 
     @Override
     public void showDataLayer() {
-        fDataLayerFrame.setVisibility(View.VISIBLE);
-        fNoDataLayerFrame.setVisibility(View.INVISIBLE);
+        /*fDataLayerFrame.setVisibility(View.VISIBLE);
+        fNoDataLayerFrame.setVisibility(View.INVISIBLE);*/
     }
 
     @Override
     public void hideDataLayer() {
-        fDataLayerFrame.setVisibility(View.INVISIBLE);
-        fNoDataLayerFrame.setVisibility(View.VISIBLE);
+        //fDataLayerFrame.setVisibility(View.INVISIBLE);
+        //fNoDataLayerFrame.setVisibility(View.VISIBLE);
     }
 
     @Override
